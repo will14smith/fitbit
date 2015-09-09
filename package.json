@@ -1,0 +1,8 @@
+{
+  "name": "fitbit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "Will Smith",
+  "license": "MIT"
+}
