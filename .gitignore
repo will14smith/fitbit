@@ -31,3 +31,4 @@ node_modules
 setup_env.sh
 config_*.js
 !config_writer.js
+downloads/*.json
