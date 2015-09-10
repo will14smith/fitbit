@@ -4,5 +4,11 @@
   "description": "",
   "main": "index.js",
   "author": "Will Smith",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "babel": "^5.8.23",
+    "prompt": "^0.2.14",
+    "request": "^2.61.0",
+    "yargs": "^3.24.0"
+  }
 }
