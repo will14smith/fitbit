@@ -16,6 +16,7 @@ const resources = [
 const intradayResources = [
   ...values(Resources.intradayActivity),
   Resources.intradayHeartrate,
+  Resources.intradaySleep,
 ];
 
 export default function run(args) {

@@ -78,10 +78,17 @@ const sleep = {
   efficiency: sleepFactory('efficiency'),
 };
 
+const intradaySleep = new ResourceMeta({
+  name: `intraday-sleep`,
+  url: date => `/1/user/-/sleep/date/${date}.json`,
+  multiDay: false,
+});
+
 export {
   activity,
   intradayActivity,
   heartrate,
   intradayHeartrate,
-  sleep
+  sleep,
+  intradaySleep,
 }

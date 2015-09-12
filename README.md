@@ -20,7 +20,6 @@ node index.js import
 
 ## TODO
 
-* Download intraday sleep data
 * Import intraday sleep data
 * Import Google location data
 * Analyse data!
