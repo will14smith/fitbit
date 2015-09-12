@@ -49,7 +49,7 @@ export default class Api {
       }, cb)))
       .then(response => {
         if(response.statusCode === 429) {
-          var retryAfter = response.headers["Retry-After"] + 2;
+          var retryAfter = parseInt(response.headers["retry-after"], 10) + 2;
           console.warn(`Rate Limit reached, retrying in ${retryAfter} seconds`);
 
           return new Promise((resolve, reject) => {

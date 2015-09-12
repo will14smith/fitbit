@@ -82,17 +82,23 @@ function buildTargetList(resources, dateRange) {
 
   return targets;
 }
+function dateToString(date) {
+  const strMonth = (date.getMonth() < 9 ? '0' : '') + (date.getMonth() + 1);
+  const strDay = (date.getDate() < 10 ? '0' : '') + date.getDate();
+
+  return date.getFullYear() + '-' + strMonth + '-' + strDay;
+}
 function buildDateList(dateRange) {
   const start = dateRange.start.split('-').map(x => parseInt(x, 10));
   const end = dateRange.end.split('-').map(x => parseInt(x, 10));
   let date = new Date(start[0], start[1] - 1, start[2]);
 
   const dates = [];
-  dates.push(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
+  dates.push(dateToString(date));
 
   while(date.getFullYear() !== end[0] || (date.getMonth() + 1) !== end[1] || date.getDate() !== end[2]) {
     date = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
-    dates.push(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
+    dates.push(dateToString(date));
   }
 
   return dates;

@@ -43,7 +43,7 @@ const activity = {
 function intradayActivityFactory(name, detail = '1min') {
   return new ResourceMeta({
     name: `intraday-activity-${name}`,
-    url: date => `/1/user/-/activity/${name}/date/${date}/1d/${detail}.json`,
+    url: date => `/1/user/-/activities/${name}/date/${date}/1d/${detail}.json`,
     multiDay: false,
   });
 }
