@@ -6,6 +6,7 @@ import elevationFactory from './Elevation';
 import floorsFactory from './Floors';
 import heartRateFactory from './HeartRate';
 import stepFactory from './Steps';
+import sleepFactory from './Sleep';
 
 const db = {
   setup(args) {
@@ -21,6 +22,10 @@ const db = {
     db.Floors = floorsFactory(db.sequelize);
     db.HeartRate = heartRateFactory(db.sequelize);
     db.Steps = stepFactory(db.sequelize);
+
+    const { Sleep, SleepMinutes } = sleepFactory(db.sequelize);
+    db.Sleep = Sleep;
+    db.SleepMinutes = SleepMinutes;
 
     return db.sequelize.sync({ force: true });
   }

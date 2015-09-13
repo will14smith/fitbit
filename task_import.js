@@ -11,10 +11,11 @@ export default function (args) {
     floors: /intraday-activity-floors/i,
     heart: /intraday-activity-heart/i,
     steps: /intraday-activity-steps/i,
+    sleep: /intraday-sleep/i,
   }
 
   Promise.all([
-    db.setup({}),
+    db.setup(args),
     loadFiles(taggedImporters),
   ]).then(([_, datas]) => {
     console.log(`Loaded ${datas.length} files, beginning import.`);
@@ -87,6 +88,59 @@ importers.steps = intradayImporter('steps', (item, time) => ({
   count: item.value,
 }), () => db.Steps);
 
+
+importers.sleep = data => {
+  const sleeps = data['sleep'];
+
+  const minuteFn = (item, minute) => {
+    const start = new Date(item.startTime);
+    const minuteStart = new Date(`${item.dateOfSleep} ${minute.dateTime}`);
+    // assume no sleep is > 24hrs and
+    // if the time is before the start time then we should roll over day
+    if(minuteStart < start) minuteStart.setDate(minuteStart.getDate() + 1);
+
+    return {
+      start: minuteStart,
+      end: addMinute(minuteStart),
+      value: minute.value,
+    };
+  };
+
+  const sleepFn = item => {
+    const start = new Date(item.startTime);
+    const end = new Date(start).setMilliseconds(item.duration);
+
+    return {
+      start: start,
+      end: end,
+
+      awakeCount: item.awakeCount,
+      awakeDuration: item.awakeDuration,
+      awakeningsCount: item.awakeningsCount,
+
+      efficiency: item.efficiency,
+      isMainSleep: item.isMainSleep,
+
+      minutesAfterWakeup: item.minutesAfterWakeup,
+      minutesAsleep: item.minutesAsleep,
+      minutesAwake: item.minutesAwake,
+      minutesToFallAsleep: item.minutesToFallAsleep,
+
+      restlessCount: item.restlessCount,
+      restlessDuration: item.restlessDuration,
+    };
+  };
+
+  return pool(sleeps, item => {
+    return db.Sleep.create(sleepFn(item)).then(sleep => {
+      const minutes = item.minuteData.map(minute => sleep.createMinute(minuteFn(item, minute)));
+
+      return Promise.all(minutes).then(() => {
+        return 1 + item.minuteData.length;
+      });
+    });
+  }, () => 0, 2).then(results => results.reduce((a, v) => a + v, 0));
+};
 
 // file helpers
 function loadFiles(taggedPatterns) {
